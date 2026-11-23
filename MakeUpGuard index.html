@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cosmetiquera de doble vista</title>
+<style>
+:root{--bg:#e9ede7;--panel:#fbfcfa;--ink:#1d2822;--mut:#617066;--line:#d3dad2;--acc:#5f8a6b;--sage:#9db39c;--gold:#c9a65a;--leather:#b8743f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141918;--panel:#1d2422;--ink:#e6ede8;--mut:#9aa9a0;--line:#2e3835;--acc:#86b693}}
+:root[data-theme="dark"]{--bg:#141918;--panel:#1d2422;--ink:#e6ede8;--mut:#9aa9a0;--line:#2e3835;--acc:#86b693}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 "Trebuchet MS","Segoe UI",system-ui,sans-serif}
+.app{display:flex;flex-direction:column;min-height:100vh}
+header{padding:14px 18px 4px}
+h1{margin:0;font:600 22px/1.2 Georgia,"Times New Roman",serif}
+header p{margin:2px 0 0;color:var(--mut);font-size:13px}
+main{display:flex;flex-direction:column;gap:12px;padding:10px 14px 18px;flex:1}
+@media(min-width:860px){main{flex-direction:row}.stage{flex:1;height:auto;min-height:560px}.panel{width:330px}}
+.stage{position:relative;height:56vh;min-height:360px;border-radius:14px;overflow:hidden;perspective:1500px;cursor:grab;touch-action:none;user-select:none;background:radial-gradient(ellipse at 50% 85%,rgba(95,138,107,.25),transparent 60%),var(--panel);border:1px solid var(--line)}
+.stage:active{cursor:grabbing}
+.hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--mut);pointer-events:none}
+.dim{position:absolute;right:12px;bottom:10px;font-size:12px;color:var(--mut);pointer-events:none}
+.badge{position:absolute;left:12px;top:10px;padding:4px 10px;border-radius:99px;background:var(--acc);color:#fff;font-size:12px;pointer-events:none}
+#cube{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.face{position:absolute;left:50%;top:50%;backface-visibility:hidden;transform-style:preserve-3d;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 42%,rgba(0,0,0,.16)),repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 1px,transparent 1px 3px),var(--c1);box-shadow:inset 0 0 0 3px rgba(0,0,0,.07)}
+.face::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(255,255,255,.3);border-radius:3px;pointer-events:none}
+.face.gshadow{background:radial-gradient(closest-side,rgba(0,0,0,.5),rgba(0,0,0,.22) 55%,transparent);box-shadow:none;pointer-events:none}.face.gshadow::before{display:none}
+.ccap{position:absolute;width:34px;height:34px;background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(0,0,0,.15)),var(--c2);border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.45),inset 0 0 0 2px rgba(0,0,0,.1)}
+#cube{--c1:#9db39c;--c2:#a7bba6;--c3:#839a85;--c4:#6f8571;--c5:#b9c6a6;--c6:#4d5f50;--lc:255,214,150;--li:.8}
+.sw button{flex:none;width:34px;height:34px;padding:0;border-radius:50%;background:var(--sw)}.sw button.on{background:var(--sw);outline:2px solid var(--acc);outline-offset:2px}
+.port{position:absolute;left:30px;top:70px;width:36px;height:28px;border-radius:5px;background:#e9ebe6;box-shadow:inset 0 0 0 2px #aaa;transition:box-shadow .3s}
+.port i{position:absolute;left:8px;top:8px;width:20px;height:12px;border-radius:6px;background:#1b1b1d;box-shadow:inset 0 0 4px #000}
+.chg .port{box-shadow:0 0 12px 4px #f5a623,inset 0 0 0 2px #f5a623}.full .port{box-shadow:0 0 12px 4px #3ecf6e,inset 0 0 0 2px #3ecf6e}
+.plugasm{position:absolute;width:0;height:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,.8,.3,1);cursor:pointer;transform:translate3d(46px,56px,60px)}
+.plugasm>div{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
+.bx{position:absolute;left:0;top:0;backface-visibility:hidden}
+.bx:nth-child(2){background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.bx:nth-child(3){background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.bx:nth-child(4){background-image:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25))}.bx:nth-child(5){background-image:linear-gradient(rgba(255,255,255,.25),rgba(255,255,255,.25))}.bx:nth-child(6){background-image:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35))}
+.bx.mt{background-color:#c4c8cc}.bx.sl{background-color:#232326}.bx.cb{background-color:#34343a}.bx.bk{background-color:#f1f1ee}
+.bat{height:12px;border-radius:7px;background:var(--line);overflow:hidden;margin-top:8px}.bat i{display:block;height:100%;width:40%;background:var(--acc);transition:width .2s}
+.cmp{position:absolute;background:rgba(0,0,0,.2);border-radius:3px;box-shadow:inset 0 2px 5px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.12)}
+.it{position:absolute;box-shadow:0 2px 3px rgba(0,0,0,.45)}
+.gp{position:absolute;display:grid;gap:3px;padding:4px;background:#2b2523;border-radius:4px}
+.tb{position:absolute;inset:2px;border:3px solid rgba(0,0,0,.4);border-radius:7px;background:rgba(255,255,255,.06)}
+.latch{position:absolute;width:16px;height:8px;background:linear-gradient(#ecd28a,#a68330);border-radius:2px}
+.br,.lip,.blush,.sp{box-shadow:0 2px 3px rgba(0,0,0,.45)}
+.mirror{cursor:pointer}.mirror:hover{filter:brightness(1.06)}
+.tip{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:5px 14px;border-radius:99px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}.tip.show{opacity:1}
+.mirror::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.6) 47%,transparent 55%)}
+.sh1::after,.sh2::after{content:"";position:absolute;inset:0;pointer-events:none;background:rgba(10,30,15,.14)}
+.sh2::after{background:rgba(10,30,15,.26)}
+.slot{position:absolute;background:var(--c6);border-radius:3px;box-shadow:inset 0 3px 8px rgba(0,0,0,.5)}
+.drawer{position:absolute;width:0;height:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.8,.3,1);cursor:pointer}
+.df{position:absolute;left:50%;top:50%}
+.df.front{background:linear-gradient(160deg,rgba(255,255,255,.25),transparent 50%,rgba(0,0,0,.15)),repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),var(--c2);border-radius:3px;box-shadow:0 3px 5px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 2px rgba(0,0,0,.08)}
+.df.bot{background:linear-gradient(rgba(0,0,0,.3),transparent 55%),var(--c4)}.df.wall{background:var(--c3)}
+.handle{position:absolute;left:50%;top:50%;width:46px;height:6px;margin:-3px 0 0 -23px;border-radius:3px;background:linear-gradient(#ecd28a,#a68330)}
+.drawer:hover .df.front{filter:brightness(1.08)}
+.br{position:absolute;height:9px;border-radius:5px;background:linear-gradient(90deg,#e0bfae 0 18%,#b9b9b9 18% 26%,#2b2b2b 26%)}
+.pal{position:absolute;left:14px;top:14px;width:150px;height:92px;padding:5px;display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:#2b2523;border-radius:4px}
+.blush{position:absolute;left:180px;top:28px;width:58px;height:58px;border-radius:50%;background:radial-gradient(#ec9f93,#d7806f);border:5px solid #3a3330}
+.lip{position:absolute;height:15px;width:104px;border-radius:7px;background:linear-gradient(90deg,var(--c) 0 28%,#c9a65a 28% 36%,#2b2b2b 36%)}
+.sp{position:absolute;border-radius:50%}
+.patch{position:absolute;width:44px;height:30px;border-radius:3px;background:var(--leather);color:#fff3e2;font:600 17px/30px Georgia,serif;text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.2) inset}
+.stud{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(#f2dc9b,#a58333)}
+.arch{position:absolute;left:-60px;top:-46px;width:120px;height:46px;border:8px solid var(--c3);border-bottom:0;border-radius:60px 60px 0 0;transform-origin:50% 100%}
+.arch::after{content:'';position:absolute;inset:2px;border:1px dashed rgba(255,255,255,.5);border-bottom:0;border-radius:52px 52px 0 0}
+.ring{position:absolute;left:50%;top:70%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:5px solid #dfe5de;background:#58665b;cursor:pointer;transition:box-shadow .3s}
+.led-on .ring{box-shadow:0 0 calc(20px*var(--li)) calc(6px*var(--li)) rgba(var(--lc),var(--li));background:rgb(var(--lc))}
+.cav{position:absolute;left:12px;top:40px;width:240px;height:188px;background:var(--c5);box-shadow:inset 0 6px 14px rgba(0,0,0,.35);border-radius:3px}
+.mirror{position:absolute;left:24px;top:52px;width:146px;height:88px;border:7px solid var(--c3);background:linear-gradient(135deg,#dfe9ee,#a2b6c1 60%,#e8f0f3);transition:box-shadow .3s,background .3s}
+.led-on .mirror{box-shadow:0 0 calc(40px*var(--li)) calc(12px*var(--li)) rgba(var(--lc),calc(.85*var(--li)));background:linear-gradient(rgba(var(--lc),calc(var(--li)*.75)),rgba(var(--lc),calc(var(--li)*.4))),linear-gradient(135deg,#dfe9ee,#a2b6c1 60%,#e8f0f3)}
+.led-on .cav{box-shadow:inset 0 6px 14px rgba(0,0,0,.3),inset 0 0 calc(60px*var(--li)) rgba(var(--lc),calc(.55*var(--li)))}
+.ledbar{position:absolute;left:24px;top:44px;width:146px;height:7px;border-radius:4px;background:#8a928c;cursor:pointer;transition:all .3s}
+.led-on .ledbar{background:rgb(var(--lc));opacity:calc(.5 + .5*var(--li));box-shadow:0 0 calc(20px*var(--li)) calc(7px*var(--li)) rgba(var(--lc),var(--li))}
+.pouch{position:absolute;top:52px;width:28px;height:88px;background:var(--c3);border-radius:4px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+.pouch i{position:absolute;left:7px;top:14px;width:14px;height:64px;border-radius:7px 7px 3px 3px;background:linear-gradient(var(--c) 0 30%,#c9a65a 30% 38%,#8a2b3a 38%)}
+.pouch b{position:absolute;left:0;right:0;top:46px;height:9px;background:var(--c4)}
+.lid{position:absolute;left:12px;top:40px;width:240px;height:188px;transform-origin:50% 100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.8,.3,1);transform:translateZ(3px) rotateX(0deg);cursor:pointer}
+.lid.open{transform:translateZ(3px) rotateX(-90deg)}
+.lid>div{position:absolute;inset:0;backface-visibility:hidden;border-radius:3px}
+.lo{background:repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),var(--c2);box-shadow:inset 0 0 0 3px rgba(0,0,0,.08)}
+.li{transform:rotateY(180deg);background:var(--c5);box-shadow:inset 0 0 0 3px rgba(0,0,0,.1)}
+.lid:hover .lo{background:#aec3ad}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.panel h2{margin:0;font:600 15px/1.2 Georgia,serif}
+.seg{display:flex;gap:6px}
+button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:9px;padding:8px 10px;cursor:pointer}
+button:hover{border-color:var(--acc)}button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.seg button{flex:1}
+.row{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left}
+.row small{display:block;color:var(--mut);font-size:12px}
+.row.on small{color:#e8f3ea}
+.pill{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid currentColor}
+.parts{display:flex;flex-direction:column;gap:6px}
+.cap{margin:0;font-size:12px;color:var(--mut)}
+label{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mut)}
+input[type=range]{flex:1;accent-color:var(--acc)}
+#msg{min-height:18px;font-size:13px;color:var(--acc)}
+@media(prefers-reduced-motion:reduce){.drawer,.lid{transition-duration:.01s}}
+</style></head>
+<body><div class="app">
+<header><h1>Cosmetiquera de doble vista</h1><p>22 × 20 × 18 cm · acceso rápido por ambos lados</p></header>
+<main>
+<section class="stage" id="stage" aria-label="Modelo 3D de la cosmetiquera">
+<span class="badge" id="bbadge" style="left:auto;right:12px;background:var(--panel);color:var(--ink);border:1px solid var(--line)">Batería 40%</span><span class="badge" id="badge">Vista frontal</span>
+<div id="cube"></div>
+<span class="hint">Arrastra para girar · toca cajones, tapa y espejo</span>
+<span class="dim">22 L × 20 A × 18 P cm</span><span class="tip" id="tip"></span>
+</section>
+<aside class="panel">
+<div><h2>Vista</h2><div class="seg" style="margin-top:8px">
+<button id="vF" class="on">Frontal</button><button id="vB">Posterior</button><button id="spin">Girar 360°</button></div></div>
+<div class="seg"><button id="auto">Giro automático</button><button id="reset">Restablecer</button></div>
+<div><h2>Luz del espejo</h2><div class="seg" style="margin-top:8px"><button id="tW" class="on">Cálida</button><button id="tC">Fría</button><button id="ledBtn">Apagar</button></div><label style="margin-top:8px">Tenue <input type="range" id="li" min="10" max="100" value="80" aria-label="Intensidad de la luz"> Máx.</label></div>
+<div><h2>Carga</h2><div class="bat"><i id="batbar"></i></div><p class="cap" id="battxt"></p><div class="seg" style="margin-top:8px"><button id="plugBtn">Conectar cargador</button><button id="seePort">Ver puerto</button></div></div>
+<div><h2>Color</h2><div class="seg sw" id="sw" style="margin-top:8px"></div></div>
+<label>Zoom <input type="range" id="zoom" min="60" max="160" value="100" aria-label="Zoom"></label>
+<div><h2>Frente: 3 cajones</h2><div class="parts" id="pf" style="margin-top:8px"></div></div>
+<div><h2>Atrás: tapa con espejo</h2><div class="parts" id="pb" style="margin-top:8px"></div></div>
+<div class="seg"><button id="openAll">Abrir todo</button><button id="closeAll">Cerrar todo</button></div>
+<p id="msg" role="status"></p>
+</aside>
+</main></div>
+<script>
+const W=264,H=240,D=216,$=s=>document.querySelector(s);
+const cube=$('#cube'),stage=$('#stage');
+const st={f1:0,f2:0,f3:0,lid:0,b1:0,b2:0,led:1};
+const parts=[
+ {id:'f1',n:'Cajón 1',s:'Brochas',side:'F'},{id:'f2',n:'Cajón 2',s:'Paletas',side:'F'},{id:'f3',n:'Cajón 3',s:'Labiales',side:'F'},
+ {id:'lid',n:'Tapa abatible',s:'Espejo con luz LED',side:'B'},{id:'b1',n:'Cajón pequeño izquierdo',s:'Esponjas y accesorios',side:'B'},{id:'b2',n:'Cajón pequeño derecho',s:'Delineadores',side:'B'}];
+const face=(c,w,h,tf,inner='')=>`<div class="face ${c}" style="width:${w}px;height:${h}px;margin:${-h/2}px 0 0 ${-w/2}px;transform:${tf}">${inner}</div>`;
+function drawer(id,cx,cy,w,h,td,items){
+ const el=document.createElement('div');el.className='drawer';el.dataset.id=id;el.style.cssText=`left:${cx}px;top:${cy}px`;
+ const f=(c,a,b,tf,i='')=>`<div class="df ${c}" style="width:${a}px;height:${b}px;margin:${-b/2}px 0 0 ${-a/2}px;transform:${tf}">${i}</div>`;
+ el.innerHTML=f('front',w,h,'translateZ(1px)','<i class="handle"></i>')+f('bot',w-6,td,`translate3d(0,${h/2-5}px,${-td/2}px) rotateX(90deg)`,items)
+ +f('wall',td,h-8,`translate3d(${-w/2+3}px,-3px,${-td/2}px) rotateY(90deg)`)+f('wall',td,h-8,`translate3d(${w/2-3}px,-3px,${-td/2}px) rotateY(90deg)`)+f('wall',w-6,h-8,`translate3d(0,-3px,${-td}px)`);
+ el.onclick=()=>{if(!drag)toggle(id)};el.dist=td*.8;return el}
+const C=(l,t,w,h,i='')=>`<div class="cmp" style="left:${l}px;top:${t}px;width:${w}px;height:${h}px">${i}</div>`;
+const E=(l,t,w,h,st='',c='')=>`<i class="it ${c}" style="left:${l}px;top:${t}px;width:${w}px;height:${h}px;${st}"></i>`;
+const GP=(l,t,w,h,cs,n)=>`<div class="gp" style="left:${l}px;top:${t}px;width:${w}px;height:${h}px;grid-template-columns:repeat(${n},1fr)">${cs.map(c=>`<i style="background:${c};border-radius:2px"></i>`).join('')}</div>`;
+const pc=c=>`background:linear-gradient(90deg,#e8c9a0 0 10%,${c} 10% 22%,#2b2b2b 22%);border-radius:3px`;
+const cols=['#e8c4a8','#d9a58b','#c98a72','#b56f5b','#e5b7a0','#c99a7e','#8f5a4a','#6e4034','#d8b9ad','#b88a8a','#a5675f','#4f3430'];
+const rnd=(c,x,y,d)=>E(x,y,d,d,`border-radius:50%;background:${c}`);
+const brushes='<div class="tb"></div>'+
+ C(7,7,224,52,[0,1,2,3,4].map(i=>E(8,4+i*9,208-i*8,8,'','br')).join(''))+
+ C(7,63,70,40,rnd('#f0cbb9',6,6,28)+rnd('#e9b7a3',38,10,24))+
+ C(81,63,70,40,E(8,8,40,4,'background:#c4c8cc;border-radius:2px;transform:rotate(8deg)')+E(8,18,40,4,'background:#c4c8cc;border-radius:2px;transform:rotate(-4deg)')+E(14,26,22,10,'border:3px solid #c4c8cc;border-radius:50%'))+
+ C(155,63,76,40,E(8,8,26,24,'border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#e9a7a0')+E(40,10,26,24,'border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#f1c4b4'))+
+ C(7,107,108,36,[0,1,2].map(i=>E(8,5+i*10,92,6,pc(['#6b3d2e','#222','#8a2b3a'][i]))).join(''))+
+ C(119,107,112,36,rnd('#d9d9d4',8,4,28)+E(48,10,50,14,'border-radius:4px;background:#bba984'))+
+ '<i class="latch" style="left:60px;top:142px"></i><i class="latch" style="left:164px;top:142px"></i>';
+const pal=C(6,6,142,86,GP(4,4,134,78,cols,4))+
+ C(152,6,80,86,rnd('radial-gradient(#ec9f93,#d7806f)',22,6,36)+rnd('radial-gradient(#f6e3c4,#d9bb8a)',22,46,36))+
+ C(6,96,74,46,rnd('radial-gradient(#b98562,#8f6244)',19,5,36))+
+ C(84,96,74,46,GP(5,5,64,36,['#e8c4a8','#c98a72','#8f5a4a','#4f3430'],4))+
+ C(162,96,70,46,E(7,9,56,6,pc('#2b2b2b'))+E(7,26,56,6,pc('#a8283a')));
+const lc=['#a8283a','#c4505d','#8c1f33','#d98a86','#b3445a','#7a1b2c','#e0766f','#9c3a4a','#cf6a76','#6d1a2a'];
+const gl=(l,t)=>E(l,t,46,11,'border-radius:6px;background:linear-gradient(90deg,#f1c7c7 0 70%,#c9a65a 70% 80%,#2b2b2b 80%)');
+const lips=C(6,6,226,98,lc.map((c,i)=>E(8+(i%2)*112,5+Math.floor(i/2)*18,104,15,'--c:'+c,'lip')).join(''))+
+ C(6,108,110,34,gl(5,4)+gl(55,4)+gl(5,19))+
+ C(120,108,112,34,[0,1,2].map(i=>E(8,4+i*10,96,6,pc(['#7a5238','#222','#a8283a'][i]))).join(''));
+const spg=C(5,5,90,42,rnd('#f0cbb9',6,5,30)+rnd('#e9b7a3',40,8,26)+rnd('#f6d9c9',70,12,16))+
+ C(5,51,43,44,E(6,8,30,4,'background:#c4c8cc;border-radius:2px;transform:rotate(8deg)')+E(6,18,30,4,'background:#c4c8cc;border-radius:2px')+E(8,26,24,12,'border:3px solid #c4c8cc;border-radius:50%'))+
+ C(52,51,43,44,rnd('#e9b7a3',6,6,30)+E(6,38,30,4,'background:#7a5238;border-radius:2px'));
+const lin=C(5,5,90,56,[0,1,2,3,4].map(i=>E(5,4+i*10,80,6,pc(['#7a5238','#222','#3b5a8a','#8a2b3a','#4a6b4a'][i]))).join(''))+
+ C(5,65,90,30,E(6,5,40,9,'border-radius:5px;background:linear-gradient(90deg,#222 0 75%,#c9a65a 75%)')+E(6,17,40,9,'border-radius:5px;background:linear-gradient(90deg,#3a3a3e 0 75%,#c9a65a 75%)'));
+// caras principales
+let fr='',bk='';
+for(let i=0;i<3;i++)fr+=`<i class="slot" style="left:10px;top:${10+i*76}px;width:244px;height:68px"></i>`;
+function box(w,h,d,c){const f=(a,b,tf)=>`<i class="bx ${c}" style="width:${a}px;height:${b}px;margin:${-b/2}px 0 0 ${-a/2}px;transform:${tf}"></i>`;
+ return f(w,h,`translateZ(${d/2}px)`)+f(w,h,`rotateY(180deg) translateZ(${d/2}px)`)+f(d,h,`rotateY(90deg) translateZ(${w/2}px)`)+f(d,h,`rotateY(-90deg) translateZ(${w/2}px)`)+f(w,d,`rotateX(90deg) translateZ(${h/2}px)`)+f(w,d,`rotateX(-90deg) translateZ(${h/2}px)`)}
+const seg=(z,w,h,d,c)=>`<div style="transform:translateZ(${z}px)">${box(w,h,d,c)}</div>`;
+const camera=`<i class="port" id="port"><i></i></i><div class="plugasm" id="plug" style="left:48px;top:84px">`+seg(12,20,8,24,'mt')+seg(35,28,16,22,'sl')+seg(81,6,6,70,'cb')+seg(131,44,44,30,'bk')+`</div>`;
+const topFace=face('sh1 top',W,D,`rotateX(90deg) translateZ(${H/2}px)`,
+ `<div style="position:absolute;left:50%;top:44%;width:0;height:0;transform-style:preserve-3d">${[-4,0,4].map(o=>`<i class="arch" style="transform:translateY(${o}px) rotateX(-90deg);border-color:${o?'var(--c3)':'var(--c2)'}"></i>`).join('')}</div><i class="patch" style="left:${W/2-22}px;top:150px">M</i><i class="ring" id="ring"></i>`+
+ [[8,8],[W-15,8],[8,D-15],[W-15,D-15]].map(p=>`<i class="ccap" style="left:${p[0]<50?0:W-34}px;top:${p[1]<50?0:D-34}px"></i><i class="stud" style="left:${p[0]}px;top:${p[1]}px"></i>`).join(''));
+cube.innerHTML=
+ face('front',W,H,`translateZ(${D/2}px)`,fr)+
+ face('back',W,H,`rotateY(180deg) translateZ(${D/2}px)`,`<div class="cav"></div><i class="mirror"></i><i class="ledbar" id="ledbar"></i><div class="pouch" style="left:182px;--c:#d45a6a"><i></i><b></b></div><div class="pouch" style="left:214px;--c:#222"><i style="background:linear-gradient(#222 0 30%,#aaa 30% 38%,#111 38%)"></i><b></b></div><i class="slot" style="left:24px;top:158px;width:106px;height:44px"></i><i class="slot" style="left:136px;top:158px;width:106px;height:44px"></i><div class="lid" id="lid"><div class="lo"><i class="patch" style="left:98px;top:80px">M</i><i class="stud" style="left:116px;top:12px"></i></div><div class="li"><p style="margin:80px 0 0;text-align:center;font:600 13px Georgia;color:#6b836d">Superficie de apoyo</p></div></div>`)+
+ face('sh1 right',D,H,`rotateY(90deg) translateZ(${W/2}px)`,camera+`<i class="patch" style="left:${D-60}px;top:${H-52}px">M</i>`)+
+ face('sh2 left',D,H,`rotateY(-90deg) translateZ(${W/2}px)`)+
+ topFace+face('sh2 bottom',W,D,`rotateX(-90deg) translateZ(${H/2}px)`)+face('gshadow',W+100,D+100,`rotateX(90deg) translateZ(${-H/2-2}px)`);
+const ff=cube.querySelector('.front'),bf=cube.querySelector('.back');
+[[ 'f1',brushes],['f2',pal],['f3',lips]].forEach((d,i)=>ff.appendChild(drawer(d[0],132,44+i*76,244,68,150,d[1])));
+bf.appendChild(drawer('b1',77,180,106,44,100,spg));bf.appendChild(drawer('b2',189,180,106,44,100,lin));
+// la tapa debe quedar por encima de la cavidad: se reubica al final
+bf.appendChild($('#lid'));
+
+const themes={Salvia:['#9db39c','#a7bba6','#839a85','#6f8571','#b9c6a6','#4d5f50'],Rosa:['#e3b5b5','#ebc4c4','#cf9fa0','#b98586','#f1d5cf','#6f4546'],Marino:['#3f5a7d','#4b6a91','#34506f','#2b4058','#7f95b0','#1b2a3c'],Crema:['#e6d9c0','#eee3cf','#d4c4a5','#bba984','#efe6d3','#7a6a4c'],Negro:['#2e2e31','#3a3a3e','#26262a','#1b1b1e','#55555c','#0f0f11'],Lavanda:['#b6a6d1','#c1b3da','#a090c0','#8777a8','#d9cfea','#4d4268']};
+Object.entries(themes).forEach(([n,c],i)=>{const b=document.createElement('button');b.title=n;b.setAttribute('aria-label','Color '+n);b.style.setProperty('--sw',c[0]);if(!i)b.classList.add('on');
+ b.onclick=()=>{c.forEach((v,k)=>cube.style.setProperty('--c'+(k+1),v));document.querySelectorAll('.sw button').forEach(x=>x.classList.toggle('on',x===b));msg('Color: '+n)};$('#sw').appendChild(b)});
+// estado y animación
+const rows={};
+parts.forEach(p=>{const b=document.createElement('button');b.className='row';b.innerHTML=`<span>${p.n}<small>${p.s}</small></span><span class="pill"></span>`;b.onclick=()=>{goSide(p.side);toggle(p.id)};($(p.side=='F'?'#pf':'#pb')).appendChild(b);rows[p.id]=b});
+const msg=t=>{$('#msg').textContent=t};
+function apply(){
+ cube.querySelectorAll('.drawer').forEach(el=>{el.style.transform=`translateZ(${st[el.dataset.id]?el.dist:0}px)`});
+ $('#lid').classList.toggle('open',!!st.lid);cube.classList.toggle('led-on',!!st.led&&!!st.lid||!!st.led&&false);
+ cube.classList.toggle('led-on',!!st.led);if(window.ledUI)ledUI();
+ parts.forEach(p=>{const r=rows[p.id];r.classList.toggle('on',!!st[p.id]);r.querySelector('.pill').textContent=st[p.id]?'Abierto':'Cerrado'})}
+function toggle(id){
+ if(id==='lid'&&st.lid){if(st.b1||st.b2){st.b1=st.b2=0;msg('Se cerraron los cajones pequeños antes de cerrar la tapa.')}else msg('');setTimeout(()=>{st.lid=0;apply()},st.b1||st.b2?0:0);st.lid=0;apply();return}
+ if((id==='b1'||id==='b2')&&!st.lid){st.lid=1;apply();msg('Se abrió la tapa para dejar salir el cajón.');setTimeout(()=>{st[id]=1;apply()},450);return}
+ st[id]=st[id]?0:1;msg('');apply()}
+$('#ring').onclick=$('#ledbar').onclick=e=>{if(drag)return;if(!st.led&&bat<=0&&!plugged){msg('Sin batería. Conecta el cargador para usar la luz.');return}st.led=st.led?0:1;msg(st.led?'Luz LED encendida.':'Luz LED apagada.');apply()};
+$('#lid').onclick=()=>{if(!drag)toggle('lid')};
+$('#openAll').onclick=()=>{st.f1=st.f2=st.f3=st.lid=1;apply();setTimeout(()=>{st.b1=st.b2=1;apply()},450);msg('')};
+$('#closeAll').onclick=()=>{st.f1=st.f2=st.f3=st.b1=st.b2=0;apply();setTimeout(()=>{st.lid=0;apply()},500);msg('')};
+
+// rotación
+let rx=-14,ry=-24,zoom=1,auto=false,drag=false,down=false,sx=0,sy=0,moved=0,side='F';
+function render(){const s=Math.min(stage.clientWidth/430,stage.clientHeight/460)*zoom;cube.style.transform=`scale(${s}) rotateX(${rx}deg) rotateY(${ry}deg)`;
+ const a=((ry%360)+360)%360;side=(a>90&&a<270)?'B':'F';$('#badge').textContent=side=='F'?'Vista frontal':'Vista posterior';
+ $('#vF').classList.toggle('on',side=='F');$('#vB').classList.toggle('on',side=='B')}
+function anim(ms){cube.style.transition=`transform ${ms}ms ease-in-out`;clearTimeout(anim.t);anim.t=setTimeout(()=>cube.style.transition='none',ms+60)}
+function goSide(s){if(side===s&&Math.abs(rx+14)<2)return;const t=s=='F'?-24:156;ry=t+360*Math.round((ry-t)/360);rx=-14;anim(800);render()}
+$('#vF').onclick=()=>goSide('F');$('#vB').onclick=()=>goSide('B');
+$('#spin').onclick=()=>{auto=false;$('#auto').classList.remove('on');anim(1600);ry+=360;render()};
+$('#auto').onclick=e=>{auto=!auto;e.currentTarget.classList.toggle('on',auto)};
+$('#reset').onclick=()=>{auto=false;$('#auto').classList.remove('on');ry=-24+360*Math.round((ry+24)/360);rx=-14;zoom=1;$('#zoom').value=100;anim(700);render();$('#closeAll').click()};
+$('#zoom').oninput=e=>{zoom=e.target.value/100;cube.style.transition='none';render()};
+stage.addEventListener('pointerdown',e=>{down=true;moved=0;sx=e.clientX;sy=e.clientY;cube.style.transition='none'});
+addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-sx,dy=e.clientY-sy;moved+=Math.abs(dx)+Math.abs(dy);if(moved>6)drag=true;ry+=dx*.5;rx=Math.max(-85,Math.min(85,rx-dy*.4));sx=e.clientX;sy=e.clientY;render()});
+addEventListener('pointerup',()=>{down=false;setTimeout(()=>drag=false,0)});
+(function loop(){if(auto&&!down){ry+=.5;render()}requestAnimationFrame(loop)})();
+addEventListener('resize',render);
+let bat=40,plugged=false,tk=0;
+function bUI(){const full=plugged&&bat>=100;$('#batbar').style.width=bat+'%';$('#bbadge').textContent='Batería '+bat+'%';
+ cube.classList.toggle('chg',plugged&&!full);cube.classList.toggle('full',full);
+ $('#battxt').textContent=full?'Carga completa. Ya puedes desconectarla y usarla sin cable.':plugged?'Cargando… '+bat+'%':bat>0?'Funciona con batería: '+bat+'%'+(bat<20?'. Conecta el cargador.':'.'):'Sin batería. Conecta el cargador.';
+ $('#plugBtn').textContent=plugged?'Desconectar':'Conectar cargador';$('#plugBtn').classList.toggle('on',plugged)}
+function setPlug(v){plugged=v;$('#plug').style.transform=v?'translateZ(-10px)':'translate3d(46px,56px,60px)';if(v)goPort();bUI();msg(v?'Cargador conectado.':'Cargador desconectado.')}
+function goPort(){ry=-85+360*Math.round((ry+85)/360);rx=-10;anim(800);render()}
+$('#plug').onclick=()=>{if(!drag)setPlug(!plugged)};$('#plugBtn').onclick=()=>setPlug(!plugged);$('#seePort').onclick=goPort;
+setInterval(()=>{tk++;if(plugged&&bat<100){bat=Math.min(100,bat+2);if(bat==100)msg('Carga completa. Puedes desconectar el cargador y usarla sin cable.')}
+ else if(!plugged&&st.led&&tk%6==0&&bat>0){bat--;if(bat==0){st.led=0;apply();msg('Batería agotada. Conecta el cargador.')}}bUI()},200);
+const tones={W:'255,214,150',C:'205,228,255'};
+function showMirror(){if(!st.lid){goSide('B');st.lid=1;apply()}}
+function setTone(k){cube.style.setProperty('--lc',tones[k]);$('#tW').classList.toggle('on',k=='W');$('#tC').classList.toggle('on',k=='C');if(!st.led&&(bat>0||plugged)){st.led=1;apply()}showMirror();msg(k=='W'?'Luz cálida.':'Luz fría.')}
+$('#tW').onclick=()=>setTone('W');$('#tC').onclick=()=>setTone('C');
+$('#li').oninput=e=>{cube.style.setProperty('--li',e.target.value/100);if(!st.led&&(bat>0||plugged)){st.led=1;apply()}showMirror()};
+$('#ledBtn').onclick=()=>$('#ring').onclick({});
+window.ledUI=()=>{$('#ledBtn').textContent=st.led?'Apagar':'Encender';$('#ledBtn').classList.toggle('on',!!st.led)};
+let lk=3,tipT;
+function tip(t){const e=$('#tip');e.textContent=t;e.classList.add('show');clearTimeout(tipT);tipT=setTimeout(()=>e.classList.remove('show'),1600)}
+function setLight(k){lk=k;if(k==0){st.led=0;apply();tip('Luz apagada');return}
+ if(bat<=0&&!plugged){msg('Sin batería. Conecta el cargador para usar la luz.');return}
+ const warm=k<=3,n=warm?k:k-3,lv=[0,.3,.6,1][n];
+ cube.style.setProperty('--lc',warm?tones.W:tones.C);cube.style.setProperty('--li',lv);$('#li').value=lv*100;
+ $('#tW').classList.toggle('on',warm);$('#tC').classList.toggle('on',!warm);st.led=1;apply();tip((warm?'Luz cálida':'Luz fría')+' · nivel '+n+' de 3')}
+const cycle=()=>{if(drag)return;setLight(!st.led?(lk||3):(lk+1)%7)};
+document.querySelector('.mirror').onclick=cycle;$('#ledbar').onclick=cycle;
+bUI();apply();render();
+</script></body></html>
